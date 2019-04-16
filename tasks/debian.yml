@@ -6,6 +6,7 @@
   become: true
   register: result
   until: result is successful
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: debian | adding grafana apt key
   apt_key:
@@ -20,14 +21,17 @@
     repo: "{{ grafana_apt_repo }}"
     state: present
   become: true
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: debian | Installing Grafana
   apt:
     name: grafana
     state: present
+    allow_unauthenticated: yes
   become: true
   register: result
   until: result is successful
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: debian | ensuring grafana started and enabled on boot
   service:
